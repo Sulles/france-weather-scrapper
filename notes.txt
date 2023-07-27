@@ -1,0 +1,2 @@
+making a lib.py file that does the stats
+assume getting a list of lists of floats
