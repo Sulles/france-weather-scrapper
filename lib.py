@@ -1,5 +1,5 @@
 #function to calculate hot and cold stitches given a list. Returns two ints
-def calculate_hot_cold_stitches(temps_list):
+def calculate_stitches(temps_list):
     # Calculate average temperature
     avg_temp = sum(temps_list) / len(temps_list)
     
@@ -21,7 +21,7 @@ temps_list = [10.8, 10.8, 11.9, 13.5, 13.9, 15, 17, 15.9, 19.1, 17.8,
               12.4, 11.9, 11.5, 11.9, 12]
 
 # Calculate hot and cold stitches
-hot_stitches, cold_stitches = calculate_hot_cold_stitches(temps_list)
+hot_stitches, cold_stitches = calculate_stitches(temps_list)
 
 # Print output
 print('Hot stitches:', hot_stitches)
