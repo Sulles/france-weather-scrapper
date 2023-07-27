@@ -33,6 +33,10 @@ for temp in temps_list:
     if temp >= avg_temp:
         hotter_than_avg_counter += 1
 
-#calc percent hotter than average
-percent_hotter_than_avg = hotter_than_avg_counter / len(temps_list) * 100
-print(percent_hotter_than_avg)
+#calc hot and cold stitches
+hot_stitches = round(hotter_than_avg_counter / len(temps_list) * 250)
+cold_stitches = 250 - hot_stitches
+
+#print output
+print('Hot stitches: ', hot_stitches)
+print('Cold stitches: ', cold_stitches)
