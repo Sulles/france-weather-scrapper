@@ -37,8 +37,6 @@ def calculate_stitches(temps_list: list[float]) -> tuple[int, int]:
     return hot_stitches, cold_stitches
 
 
-print(__name__)
-
 if __name__ == "__main__":
 
     # Given list of temperatures
