@@ -2,6 +2,11 @@ import datetime
 import subprocess
 
 
+# convert month number to french month string
+monthNum2str_fr = ['janvier', 'fevrier', 'mars', 'avril', 'mai',
+                   'juin', 'juillet', 'aout', 'septembre', 'octobre', 'novembre', 'decembre']
+
+
 def dd_mm_yyyy2date(dd_mm_yyyy: str):
     ''' convert dd_mm_yyyy string to datetime.date '''
     # separate day, month, and year
