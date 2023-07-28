@@ -1,5 +1,7 @@
 import datetime
 import subprocess
+import numpy as np
+import pandas as pd
 
 
 def dd_mm_yyyy2date(dd_mm_yyyy: str):
@@ -22,7 +24,7 @@ def frequency_complete(first_letter: str):
 
 
 def calculate_stitches(temps_list: list[float]) -> tuple[int, int]:
-    ''' function to calculate hot and cold stitches given a list. Returns two ints '''
+    ''' loop through temps list to calculate hot and cold stitches given a list. Returns two ints '''
 
     # Calculate average temperature
     avg_temp = sum(temps_list) / len(temps_list)
@@ -39,6 +41,37 @@ def calculate_stitches(temps_list: list[float]) -> tuple[int, int]:
 
     return hot_stitches, cold_stitches
 
+def calculate_stitches_new(temps_list: list[list[float]]) -> list[tuple[int, int]]:
+    ''' list comparison to calculate hot and cold stitches given a list of lists. Returns a list of tuples '''
+
+    # Convert temps to numpy array
+    temps_np = np.array(temps_list)
+
+    # Calculate average temperature using numpy
+    avg_temp = np.mean(temps_np, axis=1).reshape((len(temps_list), 1))
+
+    # Calculate boolean mask of temperatures hotter than average
+    hotter_than_avg_mask = temps_np >= avg_temp
+
+    # Count the number of temperatures hotter than average
+    hotter_than_avg_counter = np.sum(hotter_than_avg_mask, axis=1)
+
+    # Calculate hot and cold stitches
+    hot_stitches = np.rint(hotter_than_avg_counter / len(temps_list[0]) * 250)
+    cold_stitches = 250 - hot_stitches
+    stitches = np.vstack((hot_stitches, cold_stitches)).astype(int).T
+
+    return stitches
+
+def write_csv_with_headings(stitches_calced: list[tuple[int, int]]) -> pd:
+    ''' create csv with row and column names, returns dataframe '''
+
+    #headings and csv stuff
+    row_names = ['May 1st', 'May 2nd']
+    column_names = ['Hot Stitches', 'Cold Stitches']
+    dataframe = pd.DataFrame(data, index= row_names, columns= column_names)
+    dataframe.to_csv('stitching_guide.csv')
+    return dataframe
 
 if __name__ == "__main__":
 
