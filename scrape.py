@@ -1,7 +1,9 @@
 import argparse
 from bs4 import BeautifulSoup
 import sqlite3
+import re
 import requests
+import time
 
 from util import *
 
@@ -34,6 +36,15 @@ def main():
     print(f"Launching scrapper on '{TARGET_SITE_ROOT}' for weather data from " +
           f"{args.start} to {args.end}")
 
+    # define list of dates to save
+    all_dates: list[str] = []
+
+    # define list of list of temperatures to save
+    all_temps: list[list[float]] = []
+
+    # define reg expression to get temp from html poopoo
+    temp_expr = ">\D*(\d*.\d*)\D*</span>"
+
     # set target_day to start
     target_day: datetime.date = args.start
 
@@ -53,22 +64,43 @@ def main():
         # get year string
         year_str = str(target_day.year)
 
+        # make date string
+        date_str = f"{day_str}/{month_str}/{year_str}"
+
         # create target url
-        target_url = TARGET_SITE_ROOT + \
-            f"/{day_str}/{month_str}/{year_str}/" + TARGET_SITE_TAIL
+        target_url = TARGET_SITE_ROOT + "/" + date_str + "/" + TARGET_SITE_TAIL
+        print(target_url)
 
         # get website data from target url
         target_page = requests.get(target_url)
 
-        # save to file
-        with open(f"{day_str}_{month_str}_{year_str}.txt", 'w') as file:
-            file.write(target_page.text)
+        # parse target page content for temperatures
+        soup = BeautifulSoup(target_page.content, "html.parser")
+        match_temp_lines = soup.find_all("span", class_="tipsy-trigger",
+                                         style="font-weight:bold;display:inline-block;font-size:16px")
+        regex_matches = re.findall(temp_expr, str(match_temp_lines))
 
-        # get temperature data only
-        # <span title="<div>Minimale sur 1h :
+        # save target date and temps to all data
+        all_dates.append(date_str.replace("/", " "))
+        all_temps.append(regex_matches)
 
-        # increment target day
+        # # save to file
+        # with open(f"{date_str}.txt", 'w') as file:
+        #     soup = BeautifulSoup(target_page.content, "html.parser")
+        #     file.write(soup.prettify())
+        #     temps = soup.find_all("span", class_="tipsy-trigger",
+        #                           style="font-weight:bold;display:inline-block;font-size:16px")
+        #     with open(f"{day_str}_{month_str}_{year_str}_only_temps_hopefully.txt", 'w') as temps_file:
+        #         temps_file.writelines(
+        #             [str(garbage_string)[-11:-7] + "\n" for garbage_string in temps])
+
+        # increment target day and sleep to not accidentally go on the DDOS list
+        time.sleep(1.0)
         target_day += TIME_DELTA
+
+    # create data frame with all data
+    d = pd.DataFrame(all_temps, index=all_dates)
+    d.to_csv("raw_data.csv")
 
 
 if __name__ == "__main__":
