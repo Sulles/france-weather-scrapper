@@ -5,7 +5,7 @@ import pandas as pd
 
 
 # convert month number to french month string
-monthNum2str_fr = ['janvier', 'fevrier', 'mars', 'avril', 'mai',
+monthNum2str_fr = [IndexError, 'janvier', 'fevrier', 'mars', 'avril', 'mai',
                    'juin', 'juillet', 'aout', 'septembre', 'octobre', 'novembre', 'decembre']
 
 
