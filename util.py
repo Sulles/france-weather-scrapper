@@ -15,6 +15,9 @@ def dd_mm_yyyy2date(dd_mm_yyyy: str):
 def frequency_complete(first_letter: str):
     ''' verbose frequency, convert... m -> monthly, d -> daily, h -> hourly '''
     frequency_dict = dict(m="monthly", d="daily", h="hourly")
+    # if people provided the whole word instead of the first letter
+    if first_letter in frequency_dict.values():
+        return first_letter
     return frequency_dict[first_letter]
 
 
