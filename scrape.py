@@ -95,7 +95,7 @@ def main():
         #             [str(garbage_string)[-11:-7] + "\n" for garbage_string in temps])
 
         # increment target day and sleep to not accidentally go on the DDOS list
-        time.sleep(1.0)
+        time.sleep(5.0)
         target_day += TIME_DELTA
 
     # create data frame with all data
