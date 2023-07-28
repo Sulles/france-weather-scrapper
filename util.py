@@ -71,18 +71,15 @@ def write_csv_with_headings(stitches_calced: list[tuple[int, int]]) -> pd:
     column_names = ['Hot Stitches', 'Cold Stitches']
     dataframe = pd.DataFrame(stitches_calced, index= row_names, columns= column_names)
     dataframe.to_csv('stitching_guide.csv')
+    
     return dataframe
 
+# Timer to compare functions
 if __name__ == "__main__":
 
-    # Given list of temperatures
-    temps_list = [10.8, 10.8, 11.9, 13.5, 13.9, 15, 17, 15.9, 19.1, 17.8,
-                  14.4, 18.5, 15.8, 15.3, 14.4, 12.2, 12.1, 12.8, 12.6,
-                  12.4, 11.9, 11.5, 11.9, 12]
+    import timeit
+    time_method_one = timeit.timeit("calculate_stitches(temps_list)", globals=globals(), number = 100000)
+    time_method_two = timeit.timeit("calculate_stitches_new(temps_list)", globals=globals(), number = 100000)
 
-    # Calculate hot and cold stitches
-    hot_stitches, cold_stitches = calculate_stitches(temps_list)
-
-    # Print output
-    print('Hot stitches:', hot_stitches)
-    print('Cold stitches:', cold_stitches)
+    print(f"Method One: {time_method_one:.6f} seconds")
+    print(f"Method Two: {time_method_two:.6f} seconds")
