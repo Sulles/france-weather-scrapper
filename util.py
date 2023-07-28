@@ -69,7 +69,7 @@ def write_csv_with_headings(stitches_calced: list[tuple[int, int]]) -> pd:
     #headings and csv stuff
     row_names = ['May 1st', 'May 2nd']
     column_names = ['Hot Stitches', 'Cold Stitches']
-    dataframe = pd.DataFrame(data, index= row_names, columns= column_names)
+    dataframe = pd.DataFrame(stitches_calced, index= row_names, columns= column_names)
     dataframe.to_csv('stitching_guide.csv')
     return dataframe
 

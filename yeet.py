@@ -1,5 +1,4 @@
-from functionwork import calculate_stitches_new, write_csv_with_headings
-
+from util import calculate_stitches_new, write_csv_with_headings
 
 # Example building of list of lists of temperatures to be replaced
 temps_list_1 = [10.8, 10.8, 11.9, 13.5, 13.9, 15, 17, 15.9, 19.1, 17.8,
@@ -11,5 +10,5 @@ temps_list_2 = [13.8, 13, 13.1, 15.2, 17.9, 21.5, 21.8, 21.8, 21.5,
 #Get list_of_lists_from_suleyman from suleyman
 list_of_lists_from_suleyman = [temps_list_1, temps_list_2]
 
-data = calculate_stitches_new(list_of_lists_from_suleyman)
-print(write_csv_with_headings(data))
+stitches_calced = calculate_stitches_new(list_of_lists_from_suleyman)
+print(write_csv_with_headings(stitches_calced))
