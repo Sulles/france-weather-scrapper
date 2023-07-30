@@ -12,6 +12,7 @@ from util import *
 TARGET_SITE_ROOT = "https://www.infoclimat.fr/observations-meteo/archives"
 TARGET_SITE_TAIL = "albi-le-sequestre/07632.html"
 TIME_DELTA = datetime.timedelta(1.0)
+CSV_FILE_NAME = "raw_data.csv"
 
 
 parser = argparse.ArgumentParser(
@@ -26,7 +27,25 @@ parser.add_argument(
     help="end date as dd_mm_yyyy")
 parser.add_argument(
     "-f", "--freq", required=True, dest="freq", metavar="frequency", choices=['daily', 'hourly'], type=frequency_complete,
-    help="frequency as either d or h (m not supported!)")
+    help="frequency as h (neither d nor m are supported!)")
+
+
+def add_data_to_csv(date_str: str, temps: list[float]):
+    # load existing csv
+    csv_data = pd.read_csv(CSV_FILE_NAME, index_col=0)
+
+    # fill temps with NaN if not 24 elements long
+    temps.extend([np.NAN for _ in range(0, 24 - len(temps))])
+
+    # edit existing row if date already exists, otherwise create a new one
+    if date_str in csv_data.index:
+        print(f"WARNING: Overwriting existing date for '{date_str}'!")
+    else:
+        print(f"Creating new entry for '{date_str}!")
+    csv_data.loc[date_str] = temps
+
+    # save csv data
+    csv_data.to_csv(CSV_FILE_NAME)
 
 
 def main():
@@ -36,11 +55,11 @@ def main():
     print(f"Launching scrapper on '{TARGET_SITE_ROOT}' for weather data from " +
           f"{args.start} to {args.end}")
 
-    # define list of dates to save
-    all_dates: list[str] = []
+    # # define list of dates to save
+    # all_dates: list[str] = []
 
-    # define list of list of temperatures to save
-    all_temps: list[list[float]] = []
+    # # define list of list of temperatures to save
+    # all_temps: list[list[float]] = []
 
     # define reg expression to get temp from html poopoo
     temp_expr = ">\D*(\d*.\d*)\D*</span>"
@@ -81,8 +100,10 @@ def main():
         regex_matches = re.findall(temp_expr, str(match_temp_lines))
 
         # save target date and temps to all data
-        all_dates.append(date_str.replace("/", " "))
-        all_temps.append(regex_matches)
+        add_data_to_csv(date_str.replace("/", " "),
+                        [float(_) for _ in regex_matches])
+        # all_dates.append(date_str.replace("/", " "))
+        # all_temps.append(regex_matches)
 
         # # save to file
         # with open(f"{date_str}.txt", 'w') as file:
@@ -98,9 +119,9 @@ def main():
         time.sleep(5.0)
         target_day += TIME_DELTA
 
-    # create data frame with all data
-    d = pd.DataFrame(all_temps, index=all_dates)
-    d.to_csv("raw_data.csv")
+    # # create data frame with all data
+    # csv_data = pd.DataFrame(all_temps, index=all_dates)
+    # csv_data.to_csv(CSV_FILE_NAME)
 
 
 if __name__ == "__main__":
