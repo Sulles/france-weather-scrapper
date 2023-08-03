@@ -54,7 +54,7 @@ def calculate_stitches_new(temps_list: list[list[float]]) -> list[tuple[int, int
     temps_np = np.array(temps_list)
 
     # Calculate average temperature using numpy
-    avg_temp = np.mean(temps_np, axis=1).reshape((len(temps_list), 1))
+    avg_temp = np.nanmean(temps_np, axis=1).reshape((len(temps_list), 1))
 
     # Calculate boolean mask of temperatures hotter than average
     hotter_than_avg_mask = temps_np >= avg_temp
