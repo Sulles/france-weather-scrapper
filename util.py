@@ -10,7 +10,7 @@ monthNum2str_fr = [IndexError, 'janvier', 'fevrier', 'mars', 'avril', 'mai',
 
 
 def dd_mm_yyyy2date(dd_mm_yyyy: str):
-    ''' convert dd_mm_yyyy string to datetime.date '''
+    """ convert dd_mm_yyyy string to datetime.date """
     # separate day, month, and year
     dd_mm_yyyy: list(int) = [int(_) for _ in dd_mm_yyyy.split('_')]
     # invert to datetime.date format of year, month, day
@@ -20,7 +20,7 @@ def dd_mm_yyyy2date(dd_mm_yyyy: str):
 
 
 def frequency_complete(first_letter: str):
-    ''' verbose frequency, convert... m -> monthly, d -> daily, h -> hourly '''
+    """ verbose frequency, convert... m -> monthly, d -> daily, h -> hourly """
     frequency_dict = dict(m="monthly", d="daily", h="hourly")
     # if people provided the whole word instead of the first letter
     if first_letter in frequency_dict.values():
@@ -29,7 +29,7 @@ def frequency_complete(first_letter: str):
 
 
 def calculate_stitches(temps_list: list[float]) -> tuple[int, int]:
-    ''' loop through temps list to calculate hot and cold stitches given a list. Returns two ints '''
+    """ loop through temps list to calculate hot and cold stitches given a list. Returns two ints """
 
     # Calculate average temperature
     avg_temp = sum(temps_list) / len(temps_list)
@@ -46,8 +46,9 @@ def calculate_stitches(temps_list: list[float]) -> tuple[int, int]:
 
     return hot_stitches, cold_stitches
 
+
 def calculate_stitches_new(temps_list: list[list[float]]) -> list[tuple[int, int]]:
-    ''' list comparison to calculate hot and cold stitches given a list of lists. Returns a list of tuples '''
+    """ list comparison to calculate hot and cold stitches given a list of lists. Returns a list of tuples """
 
     # Convert temps to numpy array
     temps_np = np.array(temps_list)
@@ -68,16 +69,18 @@ def calculate_stitches_new(temps_list: list[list[float]]) -> list[tuple[int, int
 
     return stitches
 
-def write_csv_with_headings(stitches_calced: list[tuple[int, int]]) -> pd:
-    ''' create csv with row and column names, returns dataframe '''
 
-    #headings and csv stuff
+def write_csv_with_headings(stitches_calced: list[tuple[int, int]]) -> pd:
+    """ create csv with row and column names, returns dataframe """
+
+    # headings and csv stuff
     row_names = ['May 1st', 'May 2nd']
     column_names = ['Hot Stitches', 'Cold Stitches']
     dataframe = pd.DataFrame(stitches_calced, index= row_names, columns= column_names)
     dataframe.to_csv('stitching_guide.csv')
     
     return dataframe
+
 
 # Timer to compare functions
 if __name__ == "__main__":
