@@ -70,13 +70,13 @@ def calculate_stitches_new(temps_list: list[list[float]]) -> list[tuple[int, int
     return stitches
 
 
-def write_csv_with_headings(stitches_calced: list[tuple[int, int]]) -> pd:
+def write_csv_with_headings(stitches_calced: list[tuple[int, int]], row_names: list[str]) -> pd:
     """ create csv with row and column names, returns dataframe """
 
     # headings and csv stuff
-    row_names = ['May 1st', 'May 2nd']
+    # row_names = ['May 1st', 'May 2nd']
     column_names = ['Hot Stitches', 'Cold Stitches']
-    dataframe = pd.DataFrame(stitches_calced, index= row_names, columns= column_names)
+    dataframe = pd.DataFrame(stitches_calced, index=row_names, columns=column_names)
     dataframe.to_csv('stitching_guide.csv')
     
     return dataframe
