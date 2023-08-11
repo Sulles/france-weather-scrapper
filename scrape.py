@@ -5,14 +5,11 @@ import re
 import requests
 import time
 
+from config import *
 from util import *
 
 
-# WARNING: the first day of the month is "1er", not "1", all other days are their int value
-TARGET_SITE_ROOT = "https://www.infoclimat.fr/observations-meteo/archives"
-TARGET_SITE_TAIL = "albi-le-sequestre/07632.html"
 TIME_DELTA = datetime.timedelta(1.0)
-CSV_FILE_NAME = "raw_data.csv"
 
 
 parser = argparse.ArgumentParser(
@@ -23,16 +20,16 @@ parser.add_argument(
     "-s", "--start", required=True, dest="start", metavar="start_date", type=dd_mm_yyyy2date,
     help="start date as dd_mm_yyyy")
 parser.add_argument(
-    "-e", "--end", required=True, dest="end", metavar="end_date", type=dd_mm_yyyy2date,
-    help="end date as dd_mm_yyyy")
+    "-e", "--end", default=datetime.datetime.now().date() - TIME_DELTA,
+    dest="end", metavar="end_date", type=dd_mm_yyyy2date, help="end date as dd_mm_yyyy")
 parser.add_argument(
-    "-f", "--freq", required=True, dest="freq", metavar="frequency", choices=['daily', 'hourly'], type=frequency_complete,
-    help="frequency as h (neither d nor m are supported!)")
+    "-f", "--freq", default="hourly", dest="freq", metavar="frequency", choices=['daily', 'hourly'],
+    type=frequency_complete, help="frequency as h (neither d nor m are supported!)")
 
 
 def add_data_to_csv(date_str: str, temps: list[float]):
     # load existing csv
-    csv_data = pd.read_csv(CSV_FILE_NAME, index_col=0)
+    csv_data = pd.read_csv(RAW_DATA_FILE_NAME, index_col=0)
 
     # fill temps with NaN if not 24 elements long
     temps.extend([np.NAN for _ in range(0, 24 - len(temps))])
@@ -45,7 +42,7 @@ def add_data_to_csv(date_str: str, temps: list[float]):
     csv_data.loc[date_str] = temps
 
     # save csv data
-    csv_data.to_csv(CSV_FILE_NAME)
+    csv_data.to_csv(RAW_DATA_FILE_NAME)
 
 
 def main():

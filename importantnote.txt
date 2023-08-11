@@ -1,1 +1,0 @@
-All calculations should be switches to calculate stitches out of a total of 251 instead of 250
