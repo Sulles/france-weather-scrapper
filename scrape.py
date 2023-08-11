@@ -29,7 +29,7 @@ parser.add_argument(
 
 def add_data_to_csv(date_str: str, temps: list[float]):
     # load existing csv
-    csv_data = pd.read_csv(CSV_FILE_NAME, index_col=0)
+    csv_data = pd.read_csv(RAW_DATA_FILE_NAME, index_col=0)
 
     # fill temps with NaN if not 24 elements long
     temps.extend([np.NAN for _ in range(0, 24 - len(temps))])
@@ -42,7 +42,7 @@ def add_data_to_csv(date_str: str, temps: list[float]):
     csv_data.loc[date_str] = temps
 
     # save csv data
-    csv_data.to_csv(CSV_FILE_NAME)
+    csv_data.to_csv(RAW_DATA_FILE_NAME)
 
 
 def main():

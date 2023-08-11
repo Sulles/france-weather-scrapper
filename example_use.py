@@ -17,7 +17,7 @@ from config import *
 from util import *
 
 # grab all raw data
-csv_data = pd.read_csv(CSV_FILE_NAME, index_col=0)
+csv_data = pd.read_csv(RAW_DATA_FILE_NAME, index_col=0)
 
 # calculate mins, maxs, and hours colder/hotter than the mean
 # def calculate_stitches(temps_list: list[float]) -> tuple[int, int]:

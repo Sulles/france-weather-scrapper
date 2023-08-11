@@ -3,7 +3,7 @@ import subprocess
 import numpy as np
 import pandas as pd
 
-from config import STITCHES_PER_DAY
+from config import STITCHES_PER_DAY, STITCHING_GUIDE_FILE_NAME
 
 
 # convert month number to french month string
@@ -82,7 +82,7 @@ def write_csv_with_headings(stitches_calced: list[tuple[int, int]], row_names: l
     column_names = ['Hot Stitches', 'Cold Stitches']
     dataframe = pd.DataFrame(
         stitches_calced, index=row_names, columns=column_names)
-    dataframe.to_csv('stitching_guide.csv')
+    dataframe.to_csv(STITCHING_GUIDE_FILE_NAME)
 
     return dataframe
 
