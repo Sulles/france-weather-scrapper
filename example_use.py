@@ -10,7 +10,7 @@ temps_list_2 = [13.8, 13, 13.1, 15.2, 17.9, 21.5, 21.8, 21.8, 21.5,
                 21, 20.3, 19.3, 18, 17.4, 15.4, 12.9, 10.8, 8.4, 7.6, 
                 7.7, 8.1, 8.2, 9, 10.2]
 
-df = pd.read_csv('data.csv')
+df = pd.read_csv('raw_data.csv')
 
 # Step 2: Set the 'Date' column as the index (if it's not already the index)
 # This step is necessary to use the .loc attribute with the date index.
