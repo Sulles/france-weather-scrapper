@@ -15,16 +15,16 @@ TIME_DELTA = datetime.timedelta(1.0)
 parser = argparse.ArgumentParser(
     "scrape.py",
     "scrape.py -s [dd_mm_yyyy] -e [dd_mm_yyyy] -f [m, d, or h]",
-    description="Scrape historic weather data from https://www.infoclimat.fr/observations-meteo/archives")
+    description="Scrape historical weather data from https://www.infoclimat.fr/observations-meteo/archives")
 parser.add_argument(
     "-s", "--start", required=True, dest="start", metavar="start_date", type=dd_mm_yyyy2date,
-    help="start date as dd_mm_yyyy")
+    help="[REQUIRED] start date as dd_mm_yyyy")
 parser.add_argument(
     "-e", "--end", default=datetime.datetime.now().date() - TIME_DELTA,
     dest="end", metavar="end_date", type=dd_mm_yyyy2date, help="end date as dd_mm_yyyy")
 parser.add_argument(
     "-f", "--freq", default="hourly", dest="freq", metavar="frequency", choices=['daily', 'hourly'],
-    type=frequency_complete, help="frequency as h (neither d nor m are supported!)")
+    type=frequency_complete, help="frequency as 'hourly' (neither d nor m are supported!)")
 
 
 def add_data_to_csv(date_str: str, temps: list[float]):
