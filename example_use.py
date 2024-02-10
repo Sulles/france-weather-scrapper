@@ -1,3 +1,7 @@
+"""
+TODO: this is a bunch of random different use examples... clean up and make coherent!
+"""
+
 from util import calculate_stitches_new, write_csv_with_headings
 import pandas as pd
 import numpy as np
