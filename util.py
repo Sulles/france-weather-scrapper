@@ -51,7 +51,7 @@ def calculate_stitches(temps_list: list[float]) -> tuple[int, int]:
 
 
 def calculate_stitches_new(temps_list: list[list[float]]) -> list[tuple[int, int]]:
-    """ list comparison to calculate hot and cold stitches given a list of lists. Returns a list of tuples """
+    """ list comparison to calculate hot and cold stitches given a list of lists. Returns [(hot, cold)] """
 
     # Convert temps to numpy array
     temps_np = np.array(temps_list)
@@ -74,13 +74,12 @@ def calculate_stitches_new(temps_list: list[list[float]]) -> list[tuple[int, int
     return stitches
 
 
-def write_csv_with_headings(stitches_calced: list[tuple[int, int]], row_names: list[str],
-                            csv_file_name: Path) -> pd:
+def write_csv_with_headings(
+        stitches_calced: list[tuple[int, int]], row_names: list[str], column_names: list[str],
+        csv_file_name: Path) -> pd:
     """ create csv with row and column names, returns dataframe """
 
     # headings and csv stuff
-    # row_names = ['May 1st', 'May 2nd']
-    column_names = ['Hot Stitches', 'Cold Stitches']
     dataframe = pd.DataFrame(
         stitches_calced, index=row_names, columns=column_names)
     dataframe.to_csv(csv_file_name)
