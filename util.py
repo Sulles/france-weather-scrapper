@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from config import STITCHES_PER_DAY, STITCHING_GUIDE_FILE_NAME
-
+from pathlib import Path
 
 # convert month number to french month string
 monthNum2str_fr = [IndexError, 'janvier', 'fevrier', 'mars', 'avril', 'mai',
@@ -74,7 +74,8 @@ def calculate_stitches_new(temps_list: list[list[float]]) -> list[tuple[int, int
     return stitches
 
 
-def write_csv_with_headings(stitches_calced: list[tuple[int, int]], row_names: list[str]) -> pd:
+def write_csv_with_headings(stitches_calced: list[tuple[int, int]], row_names: list[str],
+                            csv_file_name: Path) -> pd:
     """ create csv with row and column names, returns dataframe """
 
     # headings and csv stuff
@@ -82,15 +83,15 @@ def write_csv_with_headings(stitches_calced: list[tuple[int, int]], row_names: l
     column_names = ['Hot Stitches', 'Cold Stitches']
     dataframe = pd.DataFrame(
         stitches_calced, index=row_names, columns=column_names)
-    dataframe.to_csv(STITCHING_GUIDE_FILE_NAME)
+    dataframe.to_csv(csv_file_name)
 
     return dataframe
 
 
 # Timer to compare functions
 if __name__ == "__main__":
-
     import timeit
+
     time_method_one = timeit.timeit(
         "calculate_stitches(temps_list)", globals=globals(), number=100000)
     time_method_two = timeit.timeit(
