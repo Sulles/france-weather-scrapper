@@ -8,9 +8,7 @@ import time
 from config import *
 from util import *
 
-
 TIME_DELTA = datetime.timedelta(1.0)
-
 
 parser = argparse.ArgumentParser(
     "scrape.py",
@@ -32,14 +30,27 @@ def add_data_to_csv(date_str: str, temps: list[float]):
     csv_data = pd.read_csv(RAW_DATA_FILE_NAME, index_col=0)
 
     # fill temps with NaN if not 24 elements long
-    temps.extend([np.NAN for _ in range(0, 24 - len(temps))])
+    extension_temps = [np.NAN for _ in range(0, 24 - len(temps))]
+    temps.extend(extension_temps)
 
     # edit existing row if date already exists, otherwise create a new one
     if date_str in csv_data.index:
-        print(f"WARNING: Overwriting existing date for '{date_str}'!")
+        print(f"WARNING: Overwriting existing data for '{date_str}'!")
     else:
         print(f"Creating new entry for '{date_str}!")
-    csv_data.loc[date_str] = temps
+
+    try:
+        # Handle daylight savings
+        if len(temps) == 25:
+            # If we have an extra hour, remove the first hour
+            temps = temps[1:]
+        elif len(temps) == 23:
+            # If we lost an hour, duplicate the last hour
+            temps.append(temps[-1])
+        csv_data.loc[date_str] = temps
+    except Exception as e:
+        print(f"Failed to pushed {temps=} to csv_data with data {date_str=} with error\n{e=}")
+        raise e
 
     # save csv data
     csv_data.to_csv(RAW_DATA_FILE_NAME)
@@ -94,7 +105,10 @@ def main():
         soup = BeautifulSoup(target_page.content, "html.parser")
         match_temp_lines = soup.find_all("span", class_="tipsy-trigger",
                                          style="font-weight:bold;display:inline-block;font-size:16px")
+        # print(f"{match_temp_lines=}")
+
         regex_matches = re.findall(temp_expr, str(match_temp_lines))
+        # print(f"{regex_matches=}")
 
         # save target date and temps to all data
         add_data_to_csv(date_str.replace("/", " "),
