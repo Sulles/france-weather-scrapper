@@ -49,7 +49,7 @@ def add_data_to_csv(date_str: str, temps: list[float]):
             temps.append(temps[-1])
         csv_data.loc[date_str] = temps
     except Exception as e:
-        print(f"Failed to push {temps=} to csv_data with data {date_str=} with error\n{e=}")
+        print(f"Failed to push {temps=} to csv_data for {date_str=} with error\n{e=}")
         raise e
 
     # save csv data
